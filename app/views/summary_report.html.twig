@@ -1,0 +1,32 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ parent() }} / Report / {% endblock %}
+
+{% block content %}
+    <h1>Summary report </h1>
+    <div style="margin-top: 10px;">
+        {% if not valid or (summaryReport is not null and summaryReport.empty) %}
+            <div class="alert alert-warning">
+                Invalid query, please contact with developer: krasun.net@gmail.com or
+                skype: krasun.work.
+            </div>
+        {% else %}
+            {% include 'essence.html.twig' with {'essence': summaryReport.essence } %}
+            {% for providerName, providerReport in summaryReport.providerReports %}
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{% include 'provider/name/' ~ providerName ~ '.html.twig' with {'providerName' : providerName} %}</h3>
+                    </div>
+                    <div class="panel-body">
+                        {%
+                            include 'provider/analysis_summary_report/' ~ providerName ~ '.html.twig'
+                            with {
+                                'report': providerReport
+                            }
+                        %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

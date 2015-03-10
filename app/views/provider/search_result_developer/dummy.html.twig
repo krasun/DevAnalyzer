@@ -1,0 +1,7 @@
+{% set developerUniqueId = developer.providerName ~ developer.uniqueId %}
+<div style="border: 1px solid #ccc; padding: 5px; margin-top: 5px; border-radius: 5px;">
+    <label for="{{ developerUniqueId }}">
+        <input type="radio" id="{{ developerUniqueId }}" name="developer[{{ developer.providerName }}]" value="{{ developer.uniqueId }}" />
+        {{ developer.fullName }}
+    </label>
+</div>

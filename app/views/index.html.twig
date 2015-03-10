@@ -1,0 +1,75 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ parent() }} / Search concrete developer{% endblock %}
+
+{% block content %}
+    <div class="center-block" style="padding-left: 10px">
+        <form action="{{ app.url_generator.generate('search') }}" method="GET" class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="fullName">Full name</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter full name" value="{{ searchQuery.fullName }}">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="nickname">Nickname</label>
+                <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Enter nickname" value="{{ searchQuery.nickname }}">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="{{ searchQuery.email }}">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="location">Location</label>
+                <input type="text" class="form-control" id="location" name="location" placeholder="Enter location" value="{{ searchQuery.location }}">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="phoneNumber">Phone number</label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter phoneNumber" value="{{ searchQuery.phoneNumber }}">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="limit">Limit</label>
+                <select class="form-control" id="limit" name="limit">
+                    {% set limits = [5, 10, 25] %}
+                    {% for l in limits %}
+                        <option value="{{ l }}" {% if l == limit %}selected{% endif %}>{{ l }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+    </div>
+    <div style="margin-top: 10px;">
+        {% if not valid or (searchResult is defined and searchResult.empty) %}
+            <div class="alert alert-warning">Try to specify more parameters to find more developers ;)</div>
+        {% else %}
+            <form action="{{ app.url_generator.generate('report') }}" method="GET">
+                <div class="row">
+                    {% for providerName in searchResult.providerNames %}
+                        <div class="col-md-{{ 12 / searchResult.providerNames|length }}">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">{% include 'provider/name/' ~ providerName ~ '.html.twig' with {'providerName' : providerName} %}</h3>
+                                </div>
+                                <div class="panel-body">
+                                    {% set providerResult = searchResult.getResultByProviderName(providerName) %}
+                                    {% if providerResult is not null and providerResult.developers|length > 0 %}
+                                        {% for developer in providerResult.developers %}
+                                            {%
+                                            include 'provider/search_result_developer/' ~ providerName ~ '.html.twig'
+                                            with {
+                                            'developer': developer
+                                            }
+                                            %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div style="text-align: right">
+                        <input type="submit" class="btn btn-primary btn-lg" value="Analyze" />
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+{% endblock content %}

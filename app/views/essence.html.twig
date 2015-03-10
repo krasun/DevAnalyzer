@@ -1,0 +1,10 @@
+{% if essence is not null %}
+    <div class="alert alert-info">
+        {{ essence.summarySentence }}
+    </div>
+{% else %}
+    <div class="alert alert-warning">
+        It's hard to automatically summarize opinion about this developer.
+        Maybe he is good developer, but not so social active.
+    </div>
+{% endif %}

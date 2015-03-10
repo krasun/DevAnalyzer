@@ -1,0 +1,6 @@
+<?php
+
+return [
+    'github_api_token' => 'here_your_token',
+    'cache_dir' => __DIR__ . '/../data/cache'
+];

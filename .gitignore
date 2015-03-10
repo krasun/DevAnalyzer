@@ -1,0 +1,5 @@
+/.idea/
+/vendor/
+/data/
+/vagrant/.vagrant/
+/app/parameters.php
